@@ -64,7 +64,7 @@ const CHART_TYPES = [
 ];
 
 const NewHome: NextPage = () => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState('请用条形图展示数据，星期一-15人，星期二-3人，星期三-45人，星期四-124人，星期五-2人。');
   const [isLoading, setIsLoading] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [chartType, setChartType] = useState('bar');
@@ -159,12 +159,12 @@ const NewHome: NextPage = () => {
         <form id="generate-chart" onSubmit={handleSubmit} className="space-y-4">
           <SectionHeader
             stepNumber={1}
-            title="What would you like to visualize?"
+            title="你想要可视化什么？"
           />
           <TextArea
             id="input"
             name="prompt"
-            placeholder="Show me a bar chart with COVID-19 cases in London in March 2020..."
+            placeholder="请用条形图展示数据，星期一-15人，星期二-3人，星期三-45人，星期四-124人，星期五-2人。"
             value={inputValue}
             required
             autoFocus
@@ -182,39 +182,29 @@ const NewHome: NextPage = () => {
             icon={showAdvanced ? ChevronUpIcon : ChevronDownIcon}
             onClick={() => setShowAdvanced(!showAdvanced)}
           >
-            Advanced
+            高级设置
           </Button>
 
           <AnimatePresence initial={false}>
             {showAdvanced && (
               <div className="space-y-4">
-                <SegmentedControl
-                  items={[
-                    {
-                      children: 'Chart',
-                      icon: ChartBarIcon,
-                    },
-                    { children: 'PowerPoint', icon: PresentationChartLineIcon },
-                  ]}
-                  fullWidth
-                />
                 <div>
-                  <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
+                  <Text className="mb-1 dark:text-zinc-400">图表类型</Text>
                   <Select
                     name="chart-type"
                     value={chartType}
                     onValueChange={setChartType}
                     items={[
-                      { value: 'bar', textValue: 'Bar Chart' },
-                      { value: 'area', textValue: 'Area Chart' },
-                      { value: 'line', textValue: 'Line Chart' },
-                      { value: 'composed', textValue: 'Composed Chart' },
-                      { value: 'pie', textValue: 'Pie Chart' },
-                      { value: 'scatter', textValue: 'Scatter Chart' },
-                      { value: 'radar', textValue: 'Radar Chart' },
-                      { value: 'radialbar', textValue: 'Radial Bar Chart' },
-                      { value: 'treemap', textValue: 'Treemap' },
-                      { value: 'funnel', textValue: 'Funnel Chart' },
+                      { value: 'bar', textValue: '柱状图' },
+                      { value: 'area', textValue: '面积图' },
+                      { value: 'line', textValue: '折线图' },
+                      { value: 'composed', textValue: '组合图表' },
+                      { value: 'pie', textValue: '饼图' },
+                      { value: 'scatter', textValue: '散点图' },
+                      { value: 'radar', textValue: '雷达图' },
+                      { value: 'radialbar', textValue: '径向条形图' },
+                      { value: 'treemap', textValue: '树状图' },
+                      { value: 'funnel', textValue: '漏斗图' },
                     ]}
                   />
                 </div>
@@ -226,13 +216,13 @@ const NewHome: NextPage = () => {
             <Divider className="h-px dark:bg-zinc-800" />
           </div>
 
-          <SectionHeader stepNumber={2} title="Make any tweaks to the chart" />
+          <SectionHeader stepNumber={2} title="调整图表样式" />
           <div>
             <label
               htmlFor="title"
               className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none	mb-3"
             >
-              Color
+              颜色
             </label>
             <Select
               value={chartColor as Color}
@@ -240,11 +230,11 @@ const NewHome: NextPage = () => {
               leftIcon={SwatchIcon}
               leftIconColor={chartColor as IconColor}
               items={[
-                { value: 'blue', textValue: 'Blue' },
-                { value: 'purple', textValue: 'Purple' },
-                { value: 'green', textValue: 'Green' },
-                { value: 'pink', textValue: 'Pink' },
-                { value: 'yellow', textValue: 'Yellow' },
+                { value: 'blue', textValue: '蓝色' },
+                { value: 'purple', textValue: '紫色' },
+                { value: 'green', textValue: '绿色' },
+                { value: 'pink', textValue: '粉色' },
+                { value: 'yellow', textValue: '黄色' },
               ]}
             />
           </div>
@@ -254,7 +244,7 @@ const NewHome: NextPage = () => {
               htmlFor="title"
               className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none	"
             >
-              Show chart Title
+              展示图表标题
             </label>
             <Toggle
               id="title"
@@ -269,7 +259,7 @@ const NewHome: NextPage = () => {
               htmlFor="legend"
               className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none	"
             >
-              Show chart Legend
+              显示图例
             </label>
             <Toggle
               id="legend"
@@ -286,7 +276,7 @@ const NewHome: NextPage = () => {
           className="w-full"
           icon={PencilSquareIcon}
         >
-          Draw Chart
+          绘制图表
         </Button>
       </aside>
 
@@ -306,7 +296,7 @@ const NewHome: NextPage = () => {
               type="submit"
               form="generate-chart"
             >
-              Retry
+              重试
             </Button>
           )}
           {shouldRenderChart && (
@@ -317,7 +307,7 @@ const NewHome: NextPage = () => {
               className="dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 outline-none"
               onClick={() => handleDownloadClick('#chart-card')}
             >
-              Download
+              下载
             </Button>
           )}
         </div>
@@ -325,10 +315,10 @@ const NewHome: NextPage = () => {
         {error ? (
           <Callout
             className="mb-6"
-            title="Ooops! Could not generate"
+            title="抱歉！无法生成"
             color="rose"
           >
-            Try again later or restructure your request.
+            请稍后再试或重新调整您的请求。
           </Callout>
         ) : (
           <div className="w-full max-w-xl p-4">

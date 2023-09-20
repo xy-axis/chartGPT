@@ -8,7 +8,7 @@ const LoadingDots = () => {
           <div className="flex items-center justify-center m-[10px]">
             <div className="h-3 w-3 border-t-transparent border-solid animate-spin rounded-full border-white border-4"></div>
             <div className="ml-2 font-sans font-semibold">
-              hang on, finding our artistic inspiration{" "}
+            正在生成中...{" "}
             </div>
           </div>
         </button>

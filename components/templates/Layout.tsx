@@ -67,11 +67,10 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
         </Link>
         <div className="flex space-x-4">
           <a
-            href="https://github.com/whoiskatrin/chart-gpt"
+            href=""
             rel="noopener noreferrer"
-            target="_blank"
           >
-            <Button
+            {/* <Button
               size="xs"
               color="zinc"
               variant="secondary"
@@ -79,7 +78,7 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
               className="dark:hover:bg-zinc-500/20 dark:text-zinc-100"
             >
               Star on GitHub
-            </Button>
+            </Button> */}
           </a>
           <ThemeButton />
         </div>
