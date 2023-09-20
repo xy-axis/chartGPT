@@ -253,7 +253,7 @@ const NewHome: NextPage = () => {
                   </Button>
                   <Text className="mb-1 dark:text-zinc-400 select-none">最终提示词预览</Text>
                   <div
-                    className='w-full outline br-5 p-2 rounded bg-gray-50 select-none'>
+                    className='w-full outline br-5 p-2 rounded bg-gray-50 select-none dark:text-white dark:bg-black'>
                     {`${promptValue}\n\n${inputValue}\n Provide JSON data only. `}
                   </div>
                 </div>
