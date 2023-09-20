@@ -247,7 +247,10 @@ const NewHome: NextPage = () => {
                     type="button"
                     variant="light"
                     className="w-full outline-none focus:outline-none ring-0 focus:ring-0"
-                    onClick={() => setPromptValue(prefixPrompt)}
+                    onClick={() => {
+                      setPromptValue(prefixPrompt);
+                      setPrompt(prefixPrompt);
+                    }}
                   >
                     重置前置提示词
                   </Button>
