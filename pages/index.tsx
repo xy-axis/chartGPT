@@ -322,7 +322,7 @@ const NewHome: NextPage = () => {
         <Button
           type="submit"
           form="generate-chart"
-          className="w-full"
+          className="w-full mt-5"
           icon={PencilSquareIcon}
         >
           绘制图表
