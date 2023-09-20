@@ -63,8 +63,24 @@ const CHART_TYPES = [
   'funnel',
 ];
 
+const prefixPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
+[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals.`;
+
+const initPrompt = () => {
+  let prompt
+  if (typeof window !== 'undefined') {
+    prompt = localStorage.getItem('prompt')
+  }
+  return prompt || prefixPrompt
+}
+
+const setPrompt = (prompt : string): void => {
+  localStorage.setItem('prompt', prompt)
+}
+
 const NewHome: NextPage = () => {
   const [inputValue, setInputValue] = useState('请用条形图展示数据，星期一-15人，星期二-3人，星期三-45人，星期四-124人，星期五-2人。');
+  const [promptValue, setPromptValue] = useState(initPrompt());
   const [isLoading, setIsLoading] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [chartType, setChartType] = useState('bar');
@@ -93,6 +109,14 @@ const NewHome: NextPage = () => {
     []
   );
 
+  const handlePromptChange = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setPromptValue(event.target.value);
+      setPrompt(event.target.value)
+    },
+    []
+  );
+
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
@@ -109,8 +133,7 @@ const NewHome: NextPage = () => {
 
       setChartType(chartTypeResponse.data);
 
-      const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${inputValue}\n Provide JSON data only. `;
+      const libraryPrompt = `${promptValue}\n\n${inputValue}\n Provide JSON data only. `;
 
       const chartDataResponse = await axios.post('/api/parse-graph', {
         prompt: libraryPrompt,
@@ -207,6 +230,31 @@ const NewHome: NextPage = () => {
                       { value: 'funnel', textValue: '漏斗图' },
                     ]}
                   />
+                </div>
+                <div>
+                  <Text className="mb-1 dark:text-zinc-400">前置提示词</Text>
+                  <TextArea
+                    id="input"
+                    name="prompt"
+                    placeholder="请输入前置提示词"
+                    value={promptValue}
+                    required
+                    autoFocus
+                    onChange={handlePromptChange}
+                    onKeyDown={event => {}}
+                  />
+                  <Button
+                    type="button"
+                    variant="light"
+                    className="w-full outline-none focus:outline-none ring-0 focus:ring-0"
+                    onClick={() => setPromptValue(prefixPrompt)}
+                  >
+                    重置前置提示词
+                  </Button>
+                  <div
+                    className='w-full outline mt-5 br-5 p-2 rounded'>
+                    {`${promptValue}\n\n${inputValue}\n Provide JSON data only. `}
+                  </div>
                 </div>
               </div>
             )}
