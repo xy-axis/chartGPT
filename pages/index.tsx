@@ -212,7 +212,7 @@ const NewHome: NextPage = () => {
             {showAdvanced && (
               <div className="space-y-4">
                 <div>
-                  <Text className="mb-1 dark:text-zinc-400">图表类型</Text>
+                  <Text className="mb-1 dark:text-zinc-400 select-none">图表类型</Text>
                   <Select
                     name="chart-type"
                     value={chartType}
@@ -232,7 +232,7 @@ const NewHome: NextPage = () => {
                   />
                 </div>
                 <div>
-                  <Text className="mb-1 dark:text-zinc-400">前置提示词</Text>
+                  <Text className="mb-1 dark:text-zinc-400 select-none">前置提示词</Text>
                   <TextArea
                     id="input"
                     name="prompt"
@@ -251,8 +251,9 @@ const NewHome: NextPage = () => {
                   >
                     重置前置提示词
                   </Button>
+                  <Text className="mb-1 dark:text-zinc-400 select-none">最终提示词预览</Text>
                   <div
-                    className='w-full outline mt-5 br-5 p-2 rounded'>
+                    className='w-full outline br-5 p-2 rounded bg-gray-50 select-none'>
                     {`${promptValue}\n\n${inputValue}\n Provide JSON data only. `}
                   </div>
                 </div>
