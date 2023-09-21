@@ -178,7 +178,7 @@ const NewHome: NextPage = () => {
       numColsLg={3}
       className="gap-y-4 lg:gap-x-4 h-full"
     >
-      <aside className="h-full shrink-0 w-full flex flex-col justify-between lg:col-span-1 col-span-2 order-last lg:order-first">
+      <aside className="h-full shrink-0 w-full flex flex-col justify-between lg:col-span-1 col-span-2 order-last lg:order-first overflow-scroll">
         <form id="generate-chart" onSubmit={handleSubmit} className="space-y-4">
           <SectionHeader
             stepNumber={1}
@@ -256,7 +256,7 @@ const NewHome: NextPage = () => {
                   </Button>
                   <Text className="mb-1 dark:text-zinc-400 select-none">最终提示词预览</Text>
                   <div
-                    className='w-full outline br-5 p-2 rounded-sm bg-gray-50 select-none dark:text-white dark:bg-black'>
+                    className='w-full br-5  p-3 rounded-sm bg-gray-50 select-none dark:text-white dark:bg-black'>
                     {`${promptValue}\n\n${inputValue}\n Provide JSON data only. `}
                   </div>
                 </div>

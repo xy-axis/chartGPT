@@ -232,6 +232,7 @@ export const Chart: React.FC<ChartProps> = ({
                 dataKey={value}
                 stroke={getTremorColor(color || 'blue')}
                 dot={false}
+                label={showLegend}
                 strokeWidth={2}
               />
               <Bar
