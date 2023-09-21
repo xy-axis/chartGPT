@@ -1,11 +1,9 @@
 import {
   ArrowDownTrayIcon,
   ArrowPathIcon,
-  ChartBarIcon,
   ChevronDownIcon,
   ChevronUpIcon,
   PencilSquareIcon,
-  PresentationChartLineIcon,
   SwatchIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -28,7 +26,6 @@ import { NextPage } from 'next';
 import { useCallback, useMemo, useState } from 'react';
 import Chart from '../components/ChartComponent';
 import LoadingDots from '../components/LoadingDots';
-import { SegmentedControl } from '../components/atoms/SegmentedControl';
 import { IconColor, Select } from '../components/atoms/Select';
 import { TextArea } from '../components/atoms/TextArea';
 import { Toggle } from '../components/atoms/Toggle';
@@ -64,23 +61,11 @@ const CHART_TYPES = [
 ];
 
 const prefixPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals.`;
-
-const initPrompt = () => {
-  let prompt
-  if (typeof window !== 'undefined') {
-    prompt = localStorage.getItem('prompt')
-  }
-  return prompt || prefixPrompt
-}
-
-const setPrompt = (prompt : string): void => {
-  localStorage.setItem('prompt', prompt)
-}
+[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.
+ Make sure the format use double quotes and property names are string literals.直接返回JSON字符串，返回的JSON串必须是完整的并能够被解析出数据，不要加入任何说明和评价。`;
 
 const NewHome: NextPage = () => {
   const [inputValue, setInputValue] = useState('请用条形图展示数据，星期一-15人，星期二-3人，星期三-45人，星期四-124人，星期五-2人。');
-  const [promptValue, setPromptValue] = useState(initPrompt());
   const [isLoading, setIsLoading] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [chartType, setChartType] = useState('bar');
@@ -109,14 +94,6 @@ const NewHome: NextPage = () => {
     []
   );
 
-  const handlePromptChange = useCallback(
-    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setPromptValue(event.target.value);
-      setPrompt(event.target.value)
-    },
-    []
-  );
-
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
@@ -133,7 +110,7 @@ const NewHome: NextPage = () => {
 
       setChartType(chartTypeResponse.data);
 
-      const libraryPrompt = `${promptValue}\n\n${inputValue}\n Provide JSON data only. `;
+      const libraryPrompt = `${prefixPrompt}\n\n${inputValue}\n Provide JSON data only. `;
 
       const chartDataResponse = await axios.post('/api/parse-graph', {
         prompt: libraryPrompt,
@@ -230,35 +207,6 @@ const NewHome: NextPage = () => {
                       { value: 'funnel', textValue: '漏斗图' },
                     ]}
                   />
-                </div>
-                <div>
-                  <Text className="mb-1 dark:text-zinc-400 select-none">前置提示词</Text>
-                  <TextArea
-                    id="input"
-                    name="prompt"
-                    placeholder="请输入前置提示词"
-                    value={promptValue}
-                    required
-                    autoFocus
-                    onChange={handlePromptChange}
-                    onKeyDown={event => {}}
-                  />
-                  <Button
-                    type="button"
-                    variant="light"
-                    className="w-full outline-none focus:outline-none ring-0 focus:ring-0"
-                    onClick={() => {
-                      setPromptValue(prefixPrompt);
-                      setPrompt(prefixPrompt);
-                    }}
-                  >
-                    重置前置提示词
-                  </Button>
-                  <Text className="mb-1 dark:text-zinc-400 select-none">最终提示词预览</Text>
-                  <div
-                    className='w-full br-5  p-3 rounded-sm bg-gray-50 select-none dark:text-white dark:bg-black'>
-                    {`${promptValue}\n\n${inputValue}\n Provide JSON data only. `}
-                  </div>
                 </div>
               </div>
             )}
