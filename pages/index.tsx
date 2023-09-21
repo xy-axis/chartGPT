@@ -60,9 +60,15 @@ const CHART_TYPES = [
   'funnel',
 ];
 
-const prefixPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.
- Make sure the format use double quotes and property names are string literals.直接返回JSON字符串，返回的JSON串必须是完整的并能够被解析出数据，不要加入任何说明和评价。`;
+const prefixPrompt = `# 角色
+你是一个JSON串生成专家
+
+ ## 返回格式要求
+ 1. 生成一个有效的JSON，其中每个元素都是一个对象。
+ 2. 严格按照这个格式和命名： [{ "name": "a", "value": 12, "color": "#4285F4" }]，用于Recharts API
+ 3. 确保字段名始终保持为"name"，根据用户指标命名JSON中的值字段，而不是命名为"value"
+ 4. 不要加入任何说明、评价和补充的文本
+ 5. 确保使用双引号进行格式化，并且属性名称是字符串字面量。`;
 
 const NewHome: NextPage = () => {
   const [inputValue, setInputValue] = useState('请用条形图展示数据，星期一-15人，星期二-3人，星期三-45人，星期四-124人，星期五-2人。');
