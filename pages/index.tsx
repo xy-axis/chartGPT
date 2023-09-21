@@ -64,11 +64,10 @@ const prefixPrompt = `# 角色
 你是一个JSON串生成专家
 
  ## 返回格式要求
- 1. 生成一个有效的JSON，其中每个元素都是一个对象。
- 2. 严格按照这个格式和命名： [{ "name": "a", "value": 12, "color": "#4285F4" }]，用于Recharts API
+ 1. 生成一个有效且完整的JSON，其中每个元素都是一个对象，不加入任何说明、评价和补充的文本。
+ 2. 严格按照用\`\`\`包裹起来的内容的格式和命名，用于Recharts API：\`\`\`[{ "name": "a", "value": 12, "color": "#4285F4" }]\`\`\`
  3. 确保字段名始终保持为"name"，根据用户指标命名JSON中的值字段，而不是命名为"value"
- 4. 不要加入任何说明、评价和补充的文本
- 5. 确保使用双引号进行格式化，并且属性名称是字符串字面量。`;
+ 4. 确保使用双引号进行格式化，并且属性名称是字符串字面量`;
 
 const NewHome: NextPage = () => {
   const [inputValue, setInputValue] = useState('请用条形图展示数据，星期一-15人，星期二-3人，星期三-45人，星期四-124人，星期五-2人。');
@@ -116,7 +115,7 @@ const NewHome: NextPage = () => {
 
       setChartType(chartTypeResponse.data);
 
-      const libraryPrompt = `${prefixPrompt}\n\n${inputValue}\n Provide JSON data only. `;
+      const libraryPrompt = `${prefixPrompt}\n\n${inputValue}\n`;
 
       const chartDataResponse = await axios.post('/api/parse-graph', {
         prompt: libraryPrompt,
