@@ -427,7 +427,9 @@ export const Chart: React.FC<ChartProps> = ({
 
   return (
     <ResponsiveContainer width={'100%'} height={'100%'}>
-      {renderChart()}
+      <div className="overflow-scroll">
+        {renderChart()}
+      </div>
     </ResponsiveContainer>
   );
 };
