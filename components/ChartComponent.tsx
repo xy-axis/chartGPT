@@ -235,12 +235,12 @@ export const Chart: React.FC<ChartProps> = ({
                 label={showLegend}
                 strokeWidth={2}
               />
-              <Bar
+              {/* <Bar
                 dataKey="value"
                 name="value"
                 type="linear"
                 fill={getTremorColor(color || 'blue')}
-              />
+              /> */}
             </ComposedChart>
           </>
         );
