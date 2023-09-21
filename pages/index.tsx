@@ -57,7 +57,6 @@ const CHART_TYPES = [
   'radar',
   'radialbar',
   'treemap',
-  'funnel',
 ];
 
 const prefixPrompt = `# 角色
@@ -211,8 +210,7 @@ const NewHome: NextPage = () => {
                       { value: 'scatter', textValue: '散点图' },
                       { value: 'radar', textValue: '雷达图' },
                       { value: 'radialbar', textValue: '径向条形图' },
-                      { value: 'treemap', textValue: '树状图' },
-                      { value: 'funnel', textValue: '漏斗图' },
+                      { value: 'treemap', textValue: '树状图' }
                     ]}
                   />
                 </div>
