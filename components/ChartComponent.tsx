@@ -8,6 +8,9 @@ import {
 import React from 'react';
 import {
   Bar,
+  Pie,
+  PieChart,
+  Cell,
   CartesianGrid,
   ComposedChart,
   Funnel,
@@ -58,6 +61,11 @@ interface ChartProps {
   chartType: string;
   color?: Color;
   showLegend?: boolean;
+}
+
+interface CustomizedLabelProps {
+  name: string,
+  value: string
 }
 
 const Colors = {
@@ -134,6 +142,12 @@ export const getTremorColor: (color: Color) => string = (color: Color) => {
   }
 };
 
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#00C49F'];
+
+const renderCustomizedLabel = (prop: any, valueKey: string) => {
+  return `${prop.payload.name}-${prop.payload[valueKey]}`;
+};
+
 //TODO: dynamic keys instead of default value
 export const Chart: React.FC<ChartProps> = ({
   data,
@@ -142,6 +156,7 @@ export const Chart: React.FC<ChartProps> = ({
   showLegend = true,
 }) => {
   const value = data.length > 0 ? Object.keys(data[0])[1] : 'value';
+  console.log("🚀 ~ file: ChartComponent.tsx:161 ~ value:", value)
 
   const dataFormatter = (number: number) => {
     return Intl.NumberFormat('us').format(number).toString();
@@ -164,27 +179,110 @@ export const Chart: React.FC<ChartProps> = ({
         );
       case 'bar':
         return (
-          <BarChart
-            className="h-[300px]"
-            data={data}
-            index="name"
-            categories={[value]}
-            colors={[color || 'blue']}
-            showLegend={showLegend}
-            valueFormatter={dataFormatter}
-          />
+          <>
+          {showLegend && (
+            <div className="flex justify-end">
+              <Legend
+                categories={[value]}
+                colors={[color || 'blue', color || 'blue']}
+                className="mb-5"
+              />
+            </div>
+          )}
+          <ComposedChart width={500} height={260} data={data}>
+            <CartesianGrid
+              strokeDasharray="3 3"
+              horizontal
+              vertical={false}
+            />
+            <XAxis
+              dataKey="name"
+              tickLine={false}
+              axisLine={false}
+              interval="preserveStartEnd"
+              tick={{ transform: 'translate(0, 6)' }}
+              style={{
+                fontSize: '12px',
+                fontFamily: 'Inter; Helvetica',
+              }}
+              padding={{ left: 10, right: 10 }}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              type="number"
+              tick={{ transform: 'translate(-3, 0)' }}
+              style={{
+                fontSize: '12px',
+                fontFamily: 'Inter; Helvetica',
+              }}
+            />
+            <Tooltip legendColor={getTremorColor(color || 'blue')} />
+            <Bar
+              dataKey="value"
+              name="value"
+              type="linear"
+              fill={getTremorColor(color || 'blue')}
+              label={{ fill: 'white', fontSize: 20 }}
+            >
+              {data.map((entry: any, index: number) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % 20]} />
+              ))}
+            </Bar>
+          </ComposedChart>
+        </>
         );
       case 'line':
         return (
-          <LineChart
-            className="h-[300px]"
-            data={data}
-            index="name"
-            categories={[value]}
-            colors={[color || 'blue']}
-            showLegend={showLegend}
-            valueFormatter={dataFormatter}
-          />
+          <>
+          {showLegend && (
+            <div className="flex justify-end">
+              <Legend
+                categories={[value]}
+                colors={[color || 'blue', color || 'blue']}
+                className="mb-5"
+              />
+            </div>
+          )}
+          <ComposedChart width={500} height={260} data={data}>
+            <CartesianGrid
+              strokeDasharray="3 3"
+              horizontal
+              vertical={false}
+            />
+            <XAxis
+              dataKey="name"
+              tickLine={false}
+              axisLine={false}
+              interval="preserveStartEnd"
+              tick={{ transform: 'translate(0, 6)' }}
+              style={{
+                fontSize: '12px',
+                fontFamily: 'Inter; Helvetica',
+              }}
+              padding={{ left: 10, right: 10 }}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              type="number"
+              tick={{ transform: 'translate(-3, 0)' }}
+              style={{
+                fontSize: '12px',
+                fontFamily: 'Inter; Helvetica',
+              }}
+            />
+            <Tooltip legendColor={getTremorColor(color || 'blue')} />
+            <Line
+              type="linear"
+              dataKey={value}
+              stroke={getTremorColor(color || 'blue')}
+              dot={false}
+              label={showLegend}
+              strokeWidth={2}
+            />
+          </ComposedChart>
+        </>
         );
       case 'composed':
         return (
@@ -291,24 +389,21 @@ export const Chart: React.FC<ChartProps> = ({
         );
       case 'pie':
         return (
-          <DonutChart
-            className="h-[300px]"
-            data={data}
-            category={value}
-            index="name"
-            colors={[
-              (color as Color) || 'cyan',
-              'violet',
-              'rose',
-              'amber',
-              'emerald',
-              'teal',
-              'fuchsia',
-            ]}
-            // No actual legend for pie chart, but this will toggle the central text
-            showLabel={showLegend}
-            valueFormatter={dataFormatter}
-          />
+          <PieChart width={500} height={300}>
+            <Pie
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              data={data}
+              dataKey={value}
+              outerRadius={100}
+              fill={getTremorColor(color || 'blue')}
+              label={(props: any) => renderCustomizedLabel(props, value)}>
+              {data.map((entry: any, index: number) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+          </PieChart>
         );
       case 'radar':
         return (
