@@ -1,20 +1,12 @@
-import {
-  AreaChart,
-  BarChart,
-  DonutChart,
-  Legend,
-  LineChart,
-} from '@tremor/react';
+import { Legend } from '@tremor/react';
 import React from 'react';
 import {
   Bar,
   Pie,
   PieChart,
-  Cell,
+  Area,
   CartesianGrid,
   ComposedChart,
-  Funnel,
-  FunnelChart,
   Line,
   PolarAngleAxis,
   PolarGrid,
@@ -142,6 +134,55 @@ export const getTremorColor: (color: Color) => string = (color: Color) => {
   }
 };
 
+export const getSecondColor: (color: Color) => string = (color: Color) => {
+  switch (color) {
+    case 'blue':
+      return Colors.sky;
+    case 'sky':
+      return Colors.blue;
+    case 'cyan':
+      return Colors.teal;
+    case 'teal':
+      return Colors.cyan;
+    case 'emerald':
+      return Colors.green;
+    case 'green':
+      return Colors.emerald;
+    case 'lime':
+      return Colors.yellow;
+    case 'yellow':
+      return Colors.lime;
+    case 'amber':
+      return Colors.orange;
+    case 'orange':
+      return Colors.amber;
+    case 'red':
+      return Colors.rose;
+    case 'rose':
+      return Colors.red;
+    case 'pink':
+      return Colors.fuchsia;
+    case 'fuchsia':
+      return Colors.pink;
+    case 'purple':
+      return Colors.violet;
+    case 'violet':
+      return Colors.purple;
+    case 'indigo':
+      return Colors.neutral;
+    case 'neutral':
+      return Colors.indigo;
+    case 'stone':
+      return Colors.gray;
+    case 'gray':
+      return Colors.stone;
+    case 'slate':
+      return Colors.zinc;
+    case 'zinc':
+      return Colors.slate;
+  }
+};
+
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#00C49F'];
 
 const renderCustomizedLabel = (prop: any, valueKey: string) => {
@@ -167,15 +208,66 @@ export const Chart: React.FC<ChartProps> = ({
     switch (chartType) {
       case 'area':
         return (
-          <AreaChart
-            className="h-[300px]"
-            data={data}
-            index="name"
-            categories={[value]}
-            colors={[color || 'blue', 'cyan']}
-            showLegend={showLegend}
-            valueFormatter={dataFormatter}
-          />
+          // <AreaChart
+          //   className="h-[300px]"
+          //   data={data}
+          //   index="name"
+          //   categories={[value]}
+          //   colors={[color || 'blue', 'cyan']}
+          //   showLegend={showLegend}
+          //   valueFormatter={dataFormatter}
+          // />
+          <>
+          {showLegend && (
+            <div className="flex justify-end">
+              <Legend
+                categories={[value]}
+                colors={[color || 'blue', color || 'blue']}
+                className="mb-5"
+              />
+            </div>
+          )}
+          <ComposedChart width={500} height={260} data={data}>
+            <CartesianGrid
+              strokeDasharray="3 3"
+              horizontal
+              vertical={false}
+            />
+            <XAxis
+              dataKey="name"
+              tickLine={false}
+              axisLine={false}
+              interval="preserveStartEnd"
+              tick={{ transform: 'translate(0, 6)' }}
+              style={{
+                fontSize: '12px',
+                fontFamily: 'Inter; Helvetica',
+              }}
+              padding={{ left: 10, right: 10 }}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              type="number"
+              tick={{ transform: 'translate(-3, 0)' }}
+              style={{
+                fontSize: '12px',
+                fontFamily: 'Inter; Helvetica',
+              }}
+            />
+            <Tooltip legendColor={getTremorColor(color || 'blue')} />
+            <Area
+              dataKey="value"
+              name="value"
+              type="linear"
+              fill={getTremorColor(color || 'blue')}
+              label={(() => {
+                return showLegend ? { fill: getTremorColor(color || 'blue'), fontSize: 14, position: 'top' } : false
+              })()}
+            >
+            </Area>
+          </ComposedChart>
+        </>
         );
       case 'bar':
         return (
@@ -223,11 +315,10 @@ export const Chart: React.FC<ChartProps> = ({
               name="value"
               type="linear"
               fill={getTremorColor(color || 'blue')}
-              label={{ fill: 'white', fontSize: 20 }}
+              label={(() => {
+                return showLegend ? { fill: getTremorColor(color || 'blue'), fontSize: 14, position: 'top' } : false
+              })()}
             >
-              {data.map((entry: any, index: number) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % 20]} />
-              ))}
             </Bar>
           </ComposedChart>
         </>
@@ -278,8 +369,10 @@ export const Chart: React.FC<ChartProps> = ({
               dataKey={value}
               stroke={getTremorColor(color || 'blue')}
               dot={false}
-              label={showLegend}
               strokeWidth={2}
+              label={(() => {
+                return showLegend ? { fill: getTremorColor(color || 'blue'), fontSize: 14, position: 'top' } : false
+              })()}
             />
           </ComposedChart>
         </>
@@ -325,19 +418,21 @@ export const Chart: React.FC<ChartProps> = ({
                 }}
               />
               <Tooltip legendColor={getTremorColor(color || 'blue')} />
+              <Bar
+                dataKey="value"
+                name="value"
+                type="linear"
+                fill={getSecondColor(color || 'blue')}
+              />
               <Line
                 type="linear"
                 dataKey={value}
                 stroke={getTremorColor(color || 'blue')}
                 dot={false}
-                label={showLegend}
                 strokeWidth={2}
-              />
-              <Bar
-                dataKey="value"
-                name="value"
-                type="linear"
-                fill={getTremorColor(color || 'blue')}
+                label={(() => {
+                  return showLegend ? { fill: getTremorColor(color || 'blue'), fontSize: 14, position: 'top' } : false
+                })()}
               />
             </ComposedChart>
           </>
@@ -383,7 +478,10 @@ export const Chart: React.FC<ChartProps> = ({
                 }}
               />
               <Tooltip legendColor={getTremorColor(color || 'blue')} />
-              <Scatter dataKey={value} fill={getTremorColor(color || 'blue')} />
+              <Scatter dataKey={value} fill={getTremorColor(color || 'blue')} 
+                label={(() => {
+                  return showLegend ? { fill: getTremorColor(color || 'blue'), fontSize: 14, position: 'top' } : false
+                })()}/>
             </ScatterChart>
           </>
         );
@@ -398,13 +496,14 @@ export const Chart: React.FC<ChartProps> = ({
               dataKey={value}
               outerRadius={100}
               fill={getTremorColor(color || 'blue')}
-              label={(props: any) => renderCustomizedLabel(props, value)}>
-              {data.map((entry: any, index: number) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
+              label={(props: any) => showLegend ? renderCustomizedLabel(props, value) : false}>
             </Pie>
           </PieChart>
         );
+
+        // label={(() => {
+        //   return showLegend ? { fill: getTremorColor(color || 'blue'), fontSize: 14, position: 'top' } : false
+        // })()}
       case 'radar':
         return (
           <>
@@ -418,10 +517,10 @@ export const Chart: React.FC<ChartProps> = ({
               </div>
             )}
             <RadarChart
-              cx={300}
+              cx={250}
               cy={250}
               outerRadius={150}
-              width={600}
+              width={500}
               height={500}
               data={data}
             >
@@ -434,6 +533,9 @@ export const Chart: React.FC<ChartProps> = ({
                 stroke={getTremorColor(color || 'blue')}
                 fill={getTremorColor(color || 'blue')}
                 fillOpacity={0.6}
+                label={(() => {
+                  return showLegend ? { fill: getTremorColor(color || 'blue'), fontSize: 14, position: 'top' } : false
+                })()}
               />
             </RadarChart>
           </>
@@ -453,7 +555,7 @@ export const Chart: React.FC<ChartProps> = ({
             <RadialBarChart
               width={500}
               height={300}
-              cx={150}
+              cx={250}
               cy={150}
               innerRadius={20}
               outerRadius={140}
@@ -495,24 +597,6 @@ export const Chart: React.FC<ChartProps> = ({
             >
               <Tooltip legendColor={getTremorColor(color || 'blue')} />
             </Treemap>
-          </>
-        );
-      case 'funnel':
-        return (
-          <>
-            {showLegend && (
-              <div className="flex justify-end">
-                <Legend
-                  categories={[value]}
-                  colors={[color || 'blue', color || 'blue']}
-                  className="mb-5"
-                />
-              </div>
-            )}
-            <FunnelChart width={500} height={300} data={data}>
-              <Tooltip legendColor={getTremorColor(color || 'blue')} />
-              <Funnel dataKey="value" color={getTremorColor(color || 'blue')} />
-            </FunnelChart>
           </>
         );
       default:
