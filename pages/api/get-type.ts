@@ -8,7 +8,7 @@ export default async function handler(
 ): Promise<void> {
   try {
     const { inputData } = req.body;
-    const prompt = `The following are the possible chart types supported by the code provided: area, bar, line, composed, scatter, pie, radar, radialBar, treemap, and funnel. Given the user input: ${inputData}, identify the chart type the user wants to display. Return just one word
+    const prompt = `The following are the possible chart types supported by the code provided: area, bar, line, composed, scatter, pie, radar, treemap, and funnel. Given the user input: ${inputData}, identify the chart type the user wants to display. Return just one word
 `;
 
     const response = await fetch(OPENAI_API_URL, {

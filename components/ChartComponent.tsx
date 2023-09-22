@@ -189,6 +189,10 @@ const renderCustomizedLabel = (prop: any, valueKey: string) => {
   return `${prop.payload.name}-${prop.payload[valueKey]}`;
 };
 
+const calculateWidth = (number: number) => {
+ return number * 40 > 500 ? number * 40 : 500
+}
+
 //TODO: dynamic keys instead of default value
 export const Chart: React.FC<ChartProps> = ({
   data,
@@ -197,7 +201,6 @@ export const Chart: React.FC<ChartProps> = ({
   showLegend = true,
 }) => {
   const value = data.length > 0 ? Object.keys(data[0])[1] : 'value';
-  console.log("🚀 ~ file: ChartComponent.tsx:161 ~ value:", value)
 
   const dataFormatter = (number: number) => {
     return Intl.NumberFormat('us').format(number).toString();
@@ -227,7 +230,7 @@ export const Chart: React.FC<ChartProps> = ({
               />
             </div>
           )}
-          <ComposedChart width={500} height={260} data={data}>
+          <ComposedChart width={calculateWidth( data.length)} height={260} data={data}>
             <CartesianGrid
               strokeDasharray="3 3"
               horizontal
@@ -237,10 +240,10 @@ export const Chart: React.FC<ChartProps> = ({
               dataKey="name"
               tickLine={false}
               axisLine={false}
-              interval="preserveStartEnd"
+              interval={0}
               tick={{ transform: 'translate(0, 6)' }}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 fontFamily: 'Inter; Helvetica',
               }}
               padding={{ left: 10, right: 10 }}
@@ -251,7 +254,7 @@ export const Chart: React.FC<ChartProps> = ({
               type="number"
               tick={{ transform: 'translate(-3, 0)' }}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 fontFamily: 'Inter; Helvetica',
               }}
             />
@@ -281,46 +284,48 @@ export const Chart: React.FC<ChartProps> = ({
               />
             </div>
           )}
-          <ComposedChart width={500} height={260} data={data}>
-            <CartesianGrid
-              strokeDasharray="3 3"
-              horizontal
-              vertical={false}
-            />
-            <XAxis
-              dataKey="name"
-              tickLine={false}
-              axisLine={false}
-              interval="preserveStartEnd"
-              tick={{ transform: 'translate(0, 6)' }}
-              style={{
-                fontSize: '12px',
-                fontFamily: 'Inter; Helvetica',
-              }}
-              padding={{ left: 10, right: 10 }}
-            />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              type="number"
-              tick={{ transform: 'translate(-3, 0)' }}
-              style={{
-                fontSize: '12px',
-                fontFamily: 'Inter; Helvetica',
-              }}
-            />
-            <Tooltip legendColor={getTremorColor(color || 'blue')} />
-            <Bar
-              dataKey="value"
-              name="value"
-              type="linear"
-              fill={getTremorColor(color || 'blue')}
-              label={(() => {
-                return showLegend ? { fill: getTremorColor(color || 'blue'), fontSize: 14, position: 'top' } : false
-              })()}
-            >
-            </Bar>
-          </ComposedChart>
+          <div className='flex justify-center'>
+            <ComposedChart width={calculateWidth( data.length)} height={260} data={data}>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal
+                vertical={false}
+              />
+              <XAxis
+                dataKey="name"
+                tickLine={false}
+                axisLine={false}
+                interval={0}
+                tick={{ transform: 'translate(0, 6)' }}
+                style={{
+                  fontSize: '10px',
+                  fontFamily: 'Inter; Helvetica',
+                }}
+                padding={{ left: 10, right: 10 }}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                type="number"
+                tick={{ transform: 'translate(-3, 0)' }}
+                style={{
+                  fontSize: '10px',
+                  fontFamily: 'Inter; Helvetica',
+                }}
+              />
+              <Tooltip legendColor={getTremorColor(color || 'blue')} />
+              <Bar
+                dataKey="value"
+                name="value"
+                type="linear"
+                fill={getTremorColor(color || 'blue')}
+                label={(() => {
+                  return showLegend ? { fill: getTremorColor(color || 'blue'), fontSize: 14, position: 'top' } : false
+                })()}
+              >
+              </Bar>
+            </ComposedChart>
+          </div>
         </>
         );
       case 'line':
@@ -335,7 +340,7 @@ export const Chart: React.FC<ChartProps> = ({
               />
             </div>
           )}
-          <ComposedChart width={500} height={260} data={data}>
+          <ComposedChart width={calculateWidth( data.length)} height={260} data={data}>
             <CartesianGrid
               strokeDasharray="3 3"
               horizontal
@@ -345,10 +350,10 @@ export const Chart: React.FC<ChartProps> = ({
               dataKey="name"
               tickLine={false}
               axisLine={false}
-              interval="preserveStartEnd"
+              interval={0}
               tick={{ transform: 'translate(0, 6)' }}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 fontFamily: 'Inter; Helvetica',
               }}
               padding={{ left: 10, right: 10 }}
@@ -359,7 +364,7 @@ export const Chart: React.FC<ChartProps> = ({
               type="number"
               tick={{ transform: 'translate(-3, 0)' }}
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 fontFamily: 'Inter; Helvetica',
               }}
             />
@@ -389,7 +394,7 @@ export const Chart: React.FC<ChartProps> = ({
                 />
               </div>
             )}
-            <ComposedChart width={500} height={260} data={data}>
+            <ComposedChart width={calculateWidth( data.length)} height={260} data={data}>
               <CartesianGrid
                 strokeDasharray="3 3"
                 horizontal
@@ -399,10 +404,10 @@ export const Chart: React.FC<ChartProps> = ({
                 dataKey="name"
                 tickLine={false}
                 axisLine={false}
-                interval="preserveStartEnd"
+                interval={0}
                 tick={{ transform: 'translate(0, 6)' }}
                 style={{
-                  fontSize: '12px',
+                  fontSize: '10px',
                   fontFamily: 'Inter; Helvetica',
                 }}
                 padding={{ left: 10, right: 10 }}
@@ -413,7 +418,7 @@ export const Chart: React.FC<ChartProps> = ({
                 type="number"
                 tick={{ transform: 'translate(-3, 0)' }}
                 style={{
-                  fontSize: '12px',
+                  fontSize: '10px',
                   fontFamily: 'Inter; Helvetica',
                 }}
               />
@@ -449,7 +454,7 @@ export const Chart: React.FC<ChartProps> = ({
                 />
               </div>
             )}
-            <ScatterChart width={500} height={260} data={data}>
+            <ScatterChart width={calculateWidth( data.length)} height={260} data={data}>
               <CartesianGrid
                 strokeDasharray="3 3"
                 horizontal
@@ -459,7 +464,7 @@ export const Chart: React.FC<ChartProps> = ({
                 dataKey="name"
                 tickLine={false}
                 axisLine={false}
-                interval="preserveStartEnd"
+                interval={0}
                 tick={{ transform: 'translate(0, 6)' }}
                 style={{
                   fontSize: '12px',
@@ -520,7 +525,7 @@ export const Chart: React.FC<ChartProps> = ({
               cx={250}
               cy={250}
               outerRadius={150}
-              width={500}
+              width={calculateWidth( data.length)}
               height={500}
               data={data}
             >
@@ -540,40 +545,40 @@ export const Chart: React.FC<ChartProps> = ({
             </RadarChart>
           </>
         );
-      case 'radialbar':
-        return (
-          <>
-            {showLegend && (
-              <div className="flex justify-end">
-                <Legend
-                  categories={[value]}
-                  colors={[color || 'blue', color || 'blue']}
-                  className="mb-5"
-                />
-              </div>
-            )}
-            <RadialBarChart
-              width={500}
-              height={300}
-              cx={250}
-              cy={150}
-              innerRadius={20}
-              outerRadius={140}
-              barSize={10}
-              data={data}
-            >
-              <RadialBar
-                angleAxisId={15}
-                label={{
-                  position: 'insideStart',
-                  fill: getTremorColor(color || 'blue'),
-                }}
-                dataKey="value"
-              />
-              <Tooltip legendColor={getTremorColor(color || 'blue')} />
-            </RadialBarChart>
-          </>
-        );
+      // case 'radialbar':
+      //   return (
+      //     <>
+      //       {showLegend && (
+      //         <div className="flex justify-end">
+      //           <Legend
+      //             categories={[value]}
+      //             colors={[color || 'blue', color || 'blue']}
+      //             className="mb-5"
+      //           />
+      //         </div>
+      //       )}
+      //       <RadialBarChart
+      //         width={calculateWidth( data.length)}
+      //         height={300}
+      //         cx={250}
+      //         cy={150}
+      //         innerRadius={20}
+      //         outerRadius={140}
+      //         barSize={10}
+      //         data={data}
+      //       >
+      //         <RadialBar
+      //           angleAxisId={15}
+      //           label={{
+      //             position: 'insideStart',
+      //             fill: getTremorColor(color || 'blue'),
+      //           }}
+      //           dataKey="value"
+      //         />
+      //         <Tooltip legendColor={getTremorColor(color || 'blue')} />
+      //       </RadialBarChart>
+      //     </>
+      //   );
       case 'treemap':
         return (
           <>
@@ -587,13 +592,13 @@ export const Chart: React.FC<ChartProps> = ({
               </div>
             )}
             <Treemap
-              width={500}
+              width={calculateWidth( data.length)}
               height={260}
               data={data}
               dataKey="value"
               stroke="#fff"
               fill={getTremorColor(color || 'blue')}
-              content={<CustomCell colors={Object.values(Colors)} />}
+              content={<CustomCell colors={Object.values(Colors)} name={value}/>}
             >
               <Tooltip legendColor={getTremorColor(color || 'blue')} />
             </Treemap>

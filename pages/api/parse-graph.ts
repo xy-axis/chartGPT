@@ -22,14 +22,29 @@ export default async function handler(
       body: JSON.stringify({
         messages: [{ role: "user", content: prompt }],
         temperature: 0.1,
-        max_tokens: 5000,
+        n: 1,
+        model: "gpt-3.5-turbo",
+        frequency_penalty: 0,
+        presence_penalty: 0,
+      }),
+    });
+    console.log({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.1,
+        max_tokens: 10000,
         n: 1,
         model: "gpt-3.5-turbo-16k",
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
       }),
     });
-
+    
     if (!response.ok) {
       throw new Error("OpenAI API request failed");
     }
@@ -43,6 +58,7 @@ export default async function handler(
       throw new Error("Failed to generate graph data");
     }
     const stringifiedData = graphData.replace(/'/g, '"');
+    console.log("🚀 ~ file: parse-graph.ts:46 ~ stringifiedData:", stringifiedData)
     res.status(200).json(stringifiedData);
   } catch (error) {
     console.error(error);

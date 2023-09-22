@@ -17,6 +17,7 @@ import {
   Subtitle,
   Text,
   Title,
+  TextInput
 } from '@tremor/react';
 import axios from 'axios';
 import downloadjs from 'downloadjs';
@@ -55,7 +56,6 @@ const CHART_TYPES = [
   'scatter',
   'pie',
   'radar',
-  'radialbar',
   'treemap',
 ];
 
@@ -66,13 +66,15 @@ const prefixPrompt = `# 角色
  1. 确保字段名始终保持为"name"，根据用户指标命名JSON中的值字段，而不是命名为"value"
  2. 确保使用双引号进行格式化，并且属性名称是字符串字面量
  3. 返回的格式严格按照\`\`\`包裹起来的内容的格式和命名，用于Recharts API：\`\`\`[{ "name": "a", "value": 12, "color": "#4285F4" }, { "name": "a", "value": 12, "color": "#4285F4" }]\`\`\`
- 4. 生成一个有效、完整的JSON，其中每个元素都是一个对象，不加入任何说明、评价和补充的文本
+ 4. JSON必须是完整且有效的，能够支持使用JSON.parse的方法进行解析的
+ 5.不加入任何说明、评价和补充的文本
  
  ## 下面是需要你处理的字符串：
 `;
 
 const NewHome: NextPage = () => {
   const [inputValue, setInputValue] = useState('请用条形图展示数据，星期一-15人，星期二-3人，星期三-45人，星期四-124人，星期五-2人。');
+  const [drawBoardWidth ,setDrawBoardWidth] = useState('500')
   const [isLoading, setIsLoading] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [chartType, setChartType] = useState('bar');
@@ -100,6 +102,29 @@ const NewHome: NextPage = () => {
     },
     []
   );
+
+  const handleNumInputChange = useCallback(
+    (event: any) => {
+      setWidth(event.target.value)
+    },
+    []
+  );
+
+  const getWidth = () => {
+    let num
+    if (typeof window !== 'undefined') {
+      num = localStorage.getItem('Board_Width')
+    }
+    num = num  || Number.parseInt(drawBoardWidth) || '0'
+    return num + 'px'
+  }
+
+  const setWidth = (drawBoardWidth:string): void => {
+    let num = Number.parseInt(drawBoardWidth) || '0'
+    localStorage.setItem('Board_Width', num.toString())
+    setDrawBoardWidth(num.toString())
+  }
+  
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -209,9 +234,19 @@ const NewHome: NextPage = () => {
                       { value: 'pie', textValue: '饼图' },
                       { value: 'scatter', textValue: '散点图' },
                       { value: 'radar', textValue: '雷达图' },
-                      { value: 'radialbar', textValue: '径向条形图' },
                       { value: 'treemap', textValue: '树状图' }
                     ]}
+                  />
+                </div>
+                <div>
+                  <Text className="mb-1 dark:text-zinc-400 select-none">画布宽度（像素数量）</Text>
+                  <TextInput
+                    id="input"
+                    name="prompt"
+                    value={drawBoardWidth}
+                    required
+                    autoFocus
+                    onChange={handleNumInputChange}
                   />
                 </div>
               </div>
@@ -281,6 +316,7 @@ const NewHome: NextPage = () => {
           form="generate-chart"
           className="w-full mt-5"
           icon={PencilSquareIcon}
+          loading={isLoading}
         >
           绘制图表
         </Button>
@@ -327,7 +363,7 @@ const NewHome: NextPage = () => {
             请稍后再试或重新调整您的请求。
           </Callout>
         ) : (
-          <div className="w-full max-w-xl p-4">
+          <div className="w-full max-w-full p-4" style={{ width: getWidth()}}>
             {isLoading ? (
               <div className="flex items-center justify-center h-96">
                 <LoadingDots />
