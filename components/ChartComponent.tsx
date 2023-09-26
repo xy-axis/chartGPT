@@ -190,7 +190,7 @@ const renderCustomizedLabel = (prop: any, valueKey: string) => {
 };
 
 const calculateWidth = (number: number) => {
- return number * 40 > 500 ? number * 40 : 500
+ return number * 40 > 600 ? number * 40 : 600
 }
 
 //TODO: dynamic keys instead of default value
@@ -492,7 +492,7 @@ export const Chart: React.FC<ChartProps> = ({
         );
       case 'pie':
         return (
-          <PieChart width={500} height={300}>
+          <PieChart width={600} height={300}>
             <Pie
               nameKey="name"
               cx="50%"
@@ -526,7 +526,7 @@ export const Chart: React.FC<ChartProps> = ({
               cy={250}
               outerRadius={150}
               width={calculateWidth( data.length)}
-              height={500}
+              height={600}
               data={data}
             >
               <PolarGrid />
